@@ -27,10 +27,10 @@ public class RespuestaService {
     @Value("${respuesta.appeal-days}")
     private int appealDays;
 
-    @Value("${rabbitmq.exchange}")
+    @Value("respuesta.exchange")
     private String exchange;
 
-    @Value("${rabbitmq.routing-key}")
+    @Value("respuesta.creada")
     private String routingKey;
 
     public Respuesta registrarRespuesta(Long denunciaId, Long adminId, String detalle, List<MultipartFile> files) throws Exception {

@@ -1,5 +1,6 @@
 package com.pdau.cm.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,5 +25,6 @@ public class Respuesta {
     private Date fechaRespuesta;
 
     @OneToMany(mappedBy = "respuesta", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<ArchivoRespuesta> archivos;
 }
