@@ -4,10 +4,7 @@ import com.pdau.cm.model.Respuesta;
 import com.pdau.cm.service.RespuestaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -35,5 +32,12 @@ public class RespuestaController {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body("Error al guardar la respuesta: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/{denunciaId}")
+    public ResponseEntity<Respuesta> getByDenunciaId(@PathVariable Long denunciaId) {
+        return respuestaService.findByDenunciaId(denunciaId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

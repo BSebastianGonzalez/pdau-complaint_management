@@ -17,6 +17,9 @@ public class ArchivoRespuesta {
     private Long id;
     private String nombre;
     private String tipoContenido;
+
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
     private byte[] datos;
 
     @ManyToOne

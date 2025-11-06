@@ -25,7 +25,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class IndicadorGestionService {
-    private final RespuestaRepository respuestaRepository;
+ /*   private final RespuestaRepository respuestaRepository;
     private final IndicadorGestionRepository indicadorRepository;
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -152,5 +152,5 @@ public class IndicadorGestionService {
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 }
