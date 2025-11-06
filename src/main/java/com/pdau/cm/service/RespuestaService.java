@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -74,5 +75,9 @@ public class RespuestaService {
         rabbitTemplate.convertAndSend(exchange, routingKey, event);
 
         return saved;
+    }
+
+    public Optional<Respuesta> findByDenunciaId(Long denunciaId) {
+        return respuestaRepository.findByDenunciaId(denunciaId);
     }
 }

@@ -4,7 +4,10 @@ C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservi
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\controller\RespuestaController.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\dto\RespuestaRegistradaEvent.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\model\ArchivoRespuesta.java
+C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\model\IndicadorGestion.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\model\Respuesta.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\repository\ArchivoRespuestaRepository.java
+C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\repository\IndicadorGestionRepository.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\repository\RespuestaRepository.java
+C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\service\IndicadorGestionService.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\service\RespuestaService.java
