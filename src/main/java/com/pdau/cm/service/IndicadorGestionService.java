@@ -25,8 +25,9 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class IndicadorGestionService {
- /*   private final RespuestaRepository respuestaRepository;
+    private final RespuestaRepository respuestaRepository;
     private final IndicadorGestionRepository indicadorRepository;
+    private final EmailService emailService;
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Value("${microservicios.registro-denuncias-url}")
@@ -101,13 +102,21 @@ public class IndicadorGestionService {
 
         indicadorRepository.save(indicador);
 
-        // 6️⃣ Si > 50% en más de 10 días → enviar correo con SendGrid
         if (pMayor10 > 50.0) {
             String correosEndpoint = authUrl + "/api/admin/especiales/correos";
             String[] correos = restTemplate.getForObject(correosEndpoint, String[].class);
 
             if (correos != null && correos.length > 0) {
-                enviarAlertaSendGrid(correos, pMayor10);
+                String subject = "⚠️ Alerta de retraso en respuestas";
+                String htmlContent = """
+        <h2 style='color:#d9534f;'>⚠️ Alerta de retraso en respuestas</h2>
+        <p>Más del <strong>%s%%</strong> de las denuncias fueron respondidas después de 10 días.</p>
+        <p>Se recomienda realizar una auditoría del proceso de respuesta.</p>
+        """.formatted(pMayor10);
+
+                for (String correo : correos) {
+                    emailService.sendEmail(correo, subject, htmlContent);
+                }
             }
         }
 
@@ -128,29 +137,4 @@ public class IndicadorGestionService {
         if (inicio == null || fin == null) return 0;
         return Duration.between(inicio.toInstant(), fin.toInstant()).toDays();
     }
-
-    private void enviarAlertaSendGrid(String[] correos, double porcentaje) {
-        Email from = new Email(fromEmail);
-        String subject = "⚠️ Alerta de retraso en respuestas";
-        String body = "Más del " + porcentaje + "% de las denuncias fueron respondidas después de 10 días.\n"
-                + "Se recomienda realizar una auditoría del proceso de respuesta.";
-
-        SendGrid sg = new SendGrid(sendGridApiKey);
-
-        for (String destino : correos) {
-            Email to = new Email(destino);
-            Content content = new Content("text/plain", body);
-            Mail mail = new Mail(from, subject, to, content);
-
-            Request request = new Request();
-            try {
-                request.setMethod(Method.POST);
-                request.setEndpoint("mail/send");
-                request.setBody(mail.build());
-                sg.api(request);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
 }
