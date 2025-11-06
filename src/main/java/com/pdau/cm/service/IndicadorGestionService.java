@@ -25,8 +25,9 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class IndicadorGestionService {
- /*   private final RespuestaRepository respuestaRepository;
+    private final RespuestaRepository respuestaRepository;
     private final IndicadorGestionRepository indicadorRepository;
+    private final EmailService emailService;
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Value("${microservicios.registro-denuncias-url}")
@@ -101,13 +102,45 @@ public class IndicadorGestionService {
 
         indicadorRepository.save(indicador);
 
-        // 6️⃣ Si > 50% en más de 10 días → enviar correo con SendGrid
         if (pMayor10 > 50.0) {
             String correosEndpoint = authUrl + "/api/admin/especiales/correos";
             String[] correos = restTemplate.getForObject(correosEndpoint, String[].class);
 
             if (correos != null && correos.length > 0) {
-                enviarAlertaSendGrid(correos, pMayor10);
+                String subject = "⚠️ Alerta de retraso en respuestas";
+                String htmlTemplate = """
+    <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #ddd; max-width: 600px; margin: auto;'>
+        <h2 style='color:#d9534f; text-align:center;'>⚠️ Alerta de Retraso en Respuestas</h2>
+        <hr style='border: none; border-top: 2px solid #d9534f; width: 60%%; margin: 10px auto;'>
+        <p style='font-size: 16px; color: #333; text-align: justify;'>
+            Estimado equipo,
+        </p>
+        <p style='font-size: 16px; color: #333; text-align: justify;'>
+            Se ha detectado que más del <strong style='color:#d9534f;'>%s%%</strong> de las denuncias fueron respondidas después de 10 días desde su creación.
+        </p>
+        <div style='background-color:#fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin: 15px 0;'>
+            <p style='margin: 0; font-size: 15px; color: #856404;'>
+                ⚠️ Este es un indicador de posible retraso en la gestión de casos. 
+                Se recomienda revisar los tiempos de respuesta y aplicar medidas correctivas.
+            </p>
+        </div>
+        <p style='font-size: 15px; color: #555;'>
+            📅 Fecha de generación del informe: <strong>%s</strong>
+        </p>
+        <p style='font-size: 14px; color: #777; text-align: center; margin-top: 30px;'>
+            Sistema de Monitoreo de Denuncias<br>
+            <span style='font-size: 13px;'>Este mensaje se generó automáticamente, por favor no responder.</span>
+        </p>
+    </div>
+    """;
+
+                String htmlContent = String.format(htmlTemplate, pMayor10, LocalDate.now());
+
+
+
+                for (String correo : correos) {
+                    emailService.sendEmail(correo, subject, htmlContent);
+                }
             }
         }
 
@@ -128,29 +161,4 @@ public class IndicadorGestionService {
         if (inicio == null || fin == null) return 0;
         return Duration.between(inicio.toInstant(), fin.toInstant()).toDays();
     }
-
-    private void enviarAlertaSendGrid(String[] correos, double porcentaje) {
-        Email from = new Email(fromEmail);
-        String subject = "⚠️ Alerta de retraso en respuestas";
-        String body = "Más del " + porcentaje + "% de las denuncias fueron respondidas después de 10 días.\n"
-                + "Se recomienda realizar una auditoría del proceso de respuesta.";
-
-        SendGrid sg = new SendGrid(sendGridApiKey);
-
-        for (String destino : correos) {
-            Email to = new Email(destino);
-            Content content = new Content("text/plain", body);
-            Mail mail = new Mail(from, subject, to, content);
-
-            Request request = new Request();
-            try {
-                request.setMethod(Method.POST);
-                request.setEndpoint("mail/send");
-                request.setBody(mail.build());
-                sg.api(request);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
 }
