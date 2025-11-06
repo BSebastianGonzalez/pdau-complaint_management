@@ -1,9 +1,11 @@
+com\pdau\cm\service\EmailService.class
 com\pdau\cm\repository\IndicadorGestionRepository.class
 com\pdau\cm\service\IndicadorGestionService.class
 com\pdau\cm\ComplaintManagementApplication.class
 com\pdau\cm\repository\RespuestaRepository.class
 com\pdau\cm\service\RespuestaService.class
 com\pdau\cm\model\ArchivoRespuesta.class
+com\pdau\cm\controller\IndicadorController.class
 com\pdau\cm\repository\ArchivoRespuestaRepository.class
 com\pdau\cm\config\WebConfig.class
 com\pdau\cm\model\Respuesta.class
