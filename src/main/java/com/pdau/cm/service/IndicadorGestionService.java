@@ -42,6 +42,15 @@ public class IndicadorGestionService {
     @Value("${sendgrid.from-email}")
     private String fromEmail;
 
+    public List<IndicadorGestion> obtenerTodosIndicadores() {
+        return indicadorRepository.findAll();
+    }
+
+    public IndicadorGestion obtenerIndicadorPorId(Long id) {
+        return indicadorRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Indicador con ID " + id + " no encontrado."));
+    }
+
     public IndicadorGestion generarIndicador() {
         // 1️⃣ Obtener denuncias desde el microservicio de registro
         String denunciasEndpoint = registroDenunciasUrl + "/api/denuncias/list";
