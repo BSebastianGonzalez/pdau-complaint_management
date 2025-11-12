@@ -16,7 +16,7 @@ import java.util.Map;
 public class ComentarioService {
 
     private final ComentarioRepository comentarioRepository;
-    private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @Value("${microservicios.auth-url}")
     private String authenticationServiceUrl;
