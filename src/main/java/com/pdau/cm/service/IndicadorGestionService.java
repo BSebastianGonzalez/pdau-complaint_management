@@ -52,7 +52,6 @@ public class IndicadorGestionService {
     }
 
     public IndicadorGestion generarIndicador() {
-        // 1️⃣ Obtener denuncias desde el microservicio de registro
         String denunciasEndpoint = registroDenunciasUrl + "/api/denuncias/list";
         List<Map<String, Object>> denuncias = Arrays.asList(
                 Objects.requireNonNull(
@@ -60,13 +59,10 @@ public class IndicadorGestionService {
                 )
         );
 
-        // 2️⃣ Obtener respuestas locales
         List<Respuesta> respuestas = respuestaRepository.findAll();
 
-        // Contadores
         int menor3 = 0, entre3y5 = 0, entre5y10 = 0, mayor10 = 0;
 
-        // 3️⃣ Recorrer denuncias y buscar su respuesta
         for (Map<String, Object> denuncia : denuncias) {
             Long idDenuncia = ((Number) denuncia.get("id")).longValue();
             Date fechaCreacion = parseFecha(denuncia.get("fechaCreacion"));
@@ -87,9 +83,8 @@ public class IndicadorGestionService {
         }
 
         int total = menor3 + entre3y5 + entre5y10 + mayor10;
-        if (total == 0) total = 1; // evitar división por 0
+        if (total == 0) total = 1;
 
-        // 4️⃣ Calcular porcentajes
         double pMenor3 = (menor3 * 100.0) / total;
         double p3y5 = (entre3y5 * 100.0) / total;
         double p5y10 = (entre5y10 * 100.0) / total;
@@ -97,7 +92,6 @@ public class IndicadorGestionService {
 
         LocalDateTime ahora = LocalDateTime.now();
 
-        // 5️⃣ Guardar indicador
         IndicadorGestion indicador = new IndicadorGestion();
         indicador.setFechaGeneracion(ahora);
         indicador.setMenor3Dias(menor3);
@@ -144,8 +138,6 @@ public class IndicadorGestionService {
     """;
 
                 String htmlContent = String.format(htmlTemplate, pMayor10, LocalDate.now());
-
-
 
                 for (String correo : correos) {
                     emailService.sendEmail(correo, subject, htmlContent);
