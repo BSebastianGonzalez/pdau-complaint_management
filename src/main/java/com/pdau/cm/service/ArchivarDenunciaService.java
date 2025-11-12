@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -60,4 +62,13 @@ public class ArchivarDenunciaService {
 
         return archivamiento;
     }
+
+    public List<ArchivamientoDenuncia> obtenerTodos() {
+        return archivamientoRepository.findAll();
+    }
+
+    public Optional<ArchivamientoDenuncia> obtenerPorDenuncia(Long denunciaId) {
+        return archivamientoRepository.findByDenunciaId(denunciaId);
+    }
 }
+
