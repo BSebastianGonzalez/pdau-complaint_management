@@ -38,13 +38,15 @@ public class ArchivarDenunciaService {
                 ? adminData.get("nombre") + " " + adminData.get("apellido")
                 : "Administrador desconocido";
 
-        ArchivamientoDenuncia archivamiento = new ArchivamientoDenuncia();
-        archivamiento.setDenunciaId(denunciaId);
-        archivamiento.setAdminId(adminId);
-        archivamiento.setJustificacion(justificacion);
-        archivamiento.setNombreAdmin(nombreAdmin);
-        archivamiento.setFechaArchivado(LocalDateTime.now());
-        archivamiento.setActivo(true);
+        // ✅ Usar el constructor correcto
+        ArchivamientoDenuncia archivamiento = new ArchivamientoDenuncia(
+                denunciaId,
+                adminId,
+                justificacion,
+                nombreAdmin,
+                LocalDateTime.now()
+        );
+        // El campo activo ya está en true por el constructor
 
         archivamientoRepository.save(archivamiento);
 
@@ -56,7 +58,6 @@ public class ArchivarDenunciaService {
                 nombreAdmin,
                 archivamiento.getFechaArchivado()
         );
-
         rabbitTemplate.convertAndSend(
                 RabbitConfig.ARCHIVAMIENTO_EXCHANGE,
                 RabbitConfig.ARCHIVAMIENTO_ROUTING_KEY,
@@ -76,13 +77,24 @@ public class ArchivarDenunciaService {
     }
 
     public ArchivamientoDenuncia desarchivarDenuncia(Long denunciaId, Long adminId, String motivo) {
-        ArchivamientoDenuncia archivamiento = archivamientoRepository.findByDenunciaIdAndActivoTrue(denunciaId)
-                .orElseThrow(() -> new IllegalStateException("La denuncia no está archivada"));
+        System.out.println("🔓 Desarchivando denuncia: " + denunciaId);
 
+        ArchivamientoDenuncia archivamiento = archivamientoRepository
+                .findByDenunciaIdAndActivoTrue(denunciaId)
+                .orElseThrow(() -> {
+                    System.out.println("❌ No se encontró registro activo");
+                    return new IllegalStateException("La denuncia no está archivada");
+                });
+
+        System.out.println("✅ Registro encontrado con activo=" + archivamiento.isActivo());
+
+        // ✅ Cambiar a false
         archivamiento.setActivo(false);
-        archivamientoRepository.save(archivamiento);
 
-        // Enviar evento RabbitMQ para actualizar estado en el microservicio de denuncias
+        ArchivamientoDenuncia saved = archivamientoRepository.save(archivamiento);
+        System.out.println("✅ Guardado con activo=" + saved.isActivo());
+
+        // Enviar evento RabbitMQ
         DenunciaDesarchivadaEvent event = new DenunciaDesarchivadaEvent(
                 denunciaId,
                 adminId,
@@ -90,13 +102,19 @@ public class ArchivarDenunciaService {
                 LocalDateTime.now()
         );
 
-        rabbitTemplate.convertAndSend(
-                RabbitConfig.ARCHIVAMIENTO_EXCHANGE,
-                RabbitConfig.DESARCHIVAMIENTO_ROUTING_KEY,
-                event
-        );
+        try {
+            rabbitTemplate.convertAndSend(
+                    RabbitConfig.ARCHIVAMIENTO_EXCHANGE,
+                    RabbitConfig.DESARCHIVAMIENTO_ROUTING_KEY,
+                    event
+            );
+            System.out.println("✅ Evento enviado a RabbitMQ");
+        } catch (Exception e) {
+            System.err.println("⚠️ Error al enviar evento RabbitMQ: " + e.getMessage());
+            // Continuar aunque falle RabbitMQ
+        }
 
-        return archivamiento;
+        return saved;
     }
 
 }
