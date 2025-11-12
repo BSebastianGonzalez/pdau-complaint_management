@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface ArchivamientoDenunciaRepository extends JpaRepository<ArchivamientoDenuncia,Long> {
     Optional<ArchivamientoDenuncia> findByDenunciaId(Long denunciaId);
+    Optional<ArchivamientoDenuncia> findByDenunciaIdAndActivoTrue(Long denunciaId);
 }

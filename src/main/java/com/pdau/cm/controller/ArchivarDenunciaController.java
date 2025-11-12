@@ -43,4 +43,14 @@ public class ArchivarDenunciaController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @PutMapping("/{denunciaId}/desarchivar")
+    public ResponseEntity<ArchivamientoDenuncia> desarchivarDenuncia(
+            @PathVariable Long denunciaId,
+            @RequestParam Long adminId,
+            @RequestParam String motivo
+    ) {
+        ArchivamientoDenuncia result = archivarDenunciaService.desarchivarDenuncia(denunciaId, adminId, motivo);
+        return ResponseEntity.ok(result);
+    }
 }
