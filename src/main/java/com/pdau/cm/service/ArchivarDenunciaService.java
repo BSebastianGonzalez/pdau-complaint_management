@@ -2,6 +2,7 @@ package com.pdau.cm.service;
 
 import com.pdau.cm.config.RabbitConfig;
 import com.pdau.cm.dto.DenunciaArchivadaEvent;
+import com.pdau.cm.dto.DenunciaDesarchivadaEvent;
 import com.pdau.cm.model.ArchivamientoDenuncia;
 import com.pdau.cm.repository.ArchivamientoDenunciaRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,7 @@ public class ArchivarDenunciaService {
     private String authUrl;
 
     public ArchivamientoDenuncia archivarDenuncia(Long denunciaId, Long adminId, String justificacion) {
-
-        archivamientoRepository.findByDenunciaId(denunciaId)
+        archivamientoRepository.findByDenunciaIdAndActivoTrue(denunciaId)
                 .ifPresent(a -> { throw new IllegalStateException("La denuncia ya está archivada"); });
 
         // Obtener nombre del admin
@@ -44,8 +44,11 @@ public class ArchivarDenunciaService {
         archivamiento.setJustificacion(justificacion);
         archivamiento.setNombreAdmin(nombreAdmin);
         archivamiento.setFechaArchivado(LocalDateTime.now());
+        archivamiento.setActivo(true);
+
         archivamientoRepository.save(archivamiento);
 
+        // Notificar vía RabbitMQ
         DenunciaArchivadaEvent event = new DenunciaArchivadaEvent(
                 denunciaId,
                 adminId,
@@ -63,6 +66,7 @@ public class ArchivarDenunciaService {
         return archivamiento;
     }
 
+
     public List<ArchivamientoDenuncia> obtenerTodos() {
         return archivamientoRepository.findAll();
     }
@@ -70,5 +74,30 @@ public class ArchivarDenunciaService {
     public Optional<ArchivamientoDenuncia> obtenerPorDenuncia(Long denunciaId) {
         return archivamientoRepository.findByDenunciaId(denunciaId);
     }
+
+    public ArchivamientoDenuncia desarchivarDenuncia(Long denunciaId, Long adminId, String motivo) {
+        ArchivamientoDenuncia archivamiento = archivamientoRepository.findByDenunciaIdAndActivoTrue(denunciaId)
+                .orElseThrow(() -> new IllegalStateException("La denuncia no está archivada"));
+
+        archivamiento.setActivo(false);
+        archivamientoRepository.save(archivamiento);
+
+        // Enviar evento RabbitMQ para actualizar estado en el microservicio de denuncias
+        DenunciaDesarchivadaEvent event = new DenunciaDesarchivadaEvent(
+                denunciaId,
+                adminId,
+                motivo,
+                LocalDateTime.now()
+        );
+
+        rabbitTemplate.convertAndSend(
+                RabbitConfig.ARCHIVAMIENTO_EXCHANGE,
+                RabbitConfig.DESARCHIVAMIENTO_ROUTING_KEY,
+                event
+        );
+
+        return archivamiento;
+    }
+
 }
 

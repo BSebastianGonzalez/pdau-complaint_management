@@ -25,4 +25,5 @@ public class ArchivamientoDenuncia {
     private String justificacion;
     private String nombreAdmin;
     private LocalDateTime fechaArchivado;
+    private boolean activo = true;
 }
