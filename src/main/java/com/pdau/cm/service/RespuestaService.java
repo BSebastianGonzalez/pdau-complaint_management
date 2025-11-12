@@ -36,7 +36,6 @@ public class RespuestaService {
 
     public Respuesta registrarRespuesta(Long denunciaId, Long adminId, String detalle, List<MultipartFile> files) throws Exception {
 
-        // validar archivos
         List<ArchivoRespuesta> archivos = new ArrayList<>();
         if (files != null) {
             for (MultipartFile f : files) {
@@ -58,18 +57,17 @@ public class RespuestaService {
         respuesta.setFechaRespuesta(new Date());
         respuesta.setArchivos(archivos);
 
-        // relacionar archivos con la respuesta antes de guardar
         archivos.forEach(a -> a.setRespuesta(respuesta));
 
         Respuesta saved = respuestaRepository.save(respuesta);
 
-        // construir evento y enviarlo
         RespuestaRegistradaEvent event = new RespuestaRegistradaEvent(
                 denunciaId,
                 saved.getFechaRespuesta(),
                 5L,
                 appealDays,
-                saved.getId()
+                saved.getId(),
+                true
         );
 
         rabbitTemplate.convertAndSend(exchange, routingKey, event);

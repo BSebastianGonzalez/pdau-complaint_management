@@ -13,4 +13,5 @@ public class RespuestaRegistradaEvent {
     private Long estado;
     private Integer appealDays;
     private Long respuestaId;
+    private boolean archivado;
 }

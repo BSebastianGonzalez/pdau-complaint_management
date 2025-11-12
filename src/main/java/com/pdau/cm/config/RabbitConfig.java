@@ -14,8 +14,11 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitConfig {
     public static final String EXCHANGE = "respuesta.exchange";
     public static final String ROUTING_KEY = "respuesta.creada";
-
     public static final String RESPUESTA_QUEUE = "respuesta.queue";
+
+    public static final String ARCHIVAMIENTO_QUEUE = "denuncia.archivada.queue";
+    public static final String ARCHIVAMIENTO_EXCHANGE = "denuncia.archivada.exchange";
+    public static final String ARCHIVAMIENTO_ROUTING_KEY = "denuncia.archivada.key";
 
     @Bean
     public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
@@ -42,6 +45,23 @@ public class RabbitConfig {
     @Bean
     public Binding respuestaBinding(Queue respuestaQueue, TopicExchange exchange) {
         return BindingBuilder.bind(respuestaQueue).to(exchange).with(ROUTING_KEY);
+    }
+
+    @Bean
+    public Queue archivamientoQueue() {
+        return new Queue(ARCHIVAMIENTO_QUEUE, true);
+    }
+
+    @Bean
+    public TopicExchange archivamientoExchange() {
+        return new TopicExchange(ARCHIVAMIENTO_EXCHANGE);
+    }
+
+    @Bean
+    public Binding archivamientoBinding(Queue archivamientoQueue, TopicExchange archivamientoExchange) {
+        return BindingBuilder.bind(archivamientoQueue)
+                .to(archivamientoExchange)
+                .with(ARCHIVAMIENTO_ROUTING_KEY);
     }
 }
 
