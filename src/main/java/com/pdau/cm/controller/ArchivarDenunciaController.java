@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/archivar")
 @RequiredArgsConstructor
 public class ArchivarDenunciaController {
-    private ArchivarDenunciaService archivarDenunciaService;
+    private final ArchivarDenunciaService archivarDenunciaService;
 
     @PostMapping
     public ResponseEntity<?> archivarDenuncia(

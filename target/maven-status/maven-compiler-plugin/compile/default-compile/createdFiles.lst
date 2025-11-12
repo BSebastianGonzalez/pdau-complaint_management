@@ -10,6 +10,7 @@ com\pdau\cm\service\RespuestaService.class
 com\pdau\cm\model\ArchivoRespuesta.class
 com\pdau\cm\controller\IndicadorController.class
 com\pdau\cm\repository\ArchivoRespuestaRepository.class
+com\pdau\cm\model\Comentario.class
 com\pdau\cm\service\ArchivarDenunciaService.class
 com\pdau\cm\model\Respuesta.class
 com\pdau\cm\dto\DenunciaArchivadaEvent.class
