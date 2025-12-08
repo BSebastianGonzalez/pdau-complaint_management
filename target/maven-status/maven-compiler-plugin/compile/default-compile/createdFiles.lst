@@ -7,7 +7,6 @@ com\pdau\cm\ComplaintManagementApplication.class
 com\pdau\cm\service\RespuestaService.class
 com\pdau\cm\controller\IndicadorController.class
 com\pdau\cm\model\Comentario.class
-com\pdau\cm\repository\ArchivoRespuestaApelacion.class
 com\pdau\cm\model\ArchivoApelacion.class
 com\pdau\cm\service\RespuestaApelacionService.class
 com\pdau\cm\model\Respuesta.class
