@@ -1,5 +1,7 @@
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\ComplaintManagementApplication.java
+C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\config\CloudinaryConfig.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\config\RabbitConfig.java
+C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\controller\ApelacionController.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\controller\ArchivarDenunciaController.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\controller\ComentarioController.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\controller\IndicadorController.java
@@ -7,11 +9,16 @@ C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservi
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\dto\DenunciaArchivadaEvent.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\dto\DenunciaDesarchivadaEvent.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\dto\RespuestaRegistradaEvent.java
+C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\model\Apelacion.java
+C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\model\ApelacionService.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\model\ArchivamientoDenuncia.java
+C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\model\ArchivoApelacion.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\model\ArchivoRespuesta.java
+C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\model\CloudinaryService.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\model\Comentario.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\model\IndicadorGestion.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\model\Respuesta.java
+C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\repository\ApelacionRepository.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\repository\ArchivamientoDenunciaRepository.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\repository\ArchivoRespuestaRepository.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\repository\ComentarioRepository.java
