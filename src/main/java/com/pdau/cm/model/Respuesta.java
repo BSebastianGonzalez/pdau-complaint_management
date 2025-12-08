@@ -1,5 +1,6 @@
 package com.pdau.cm.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,4 +28,8 @@ public class Respuesta {
     @OneToMany(mappedBy = "respuesta", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<ArchivoRespuesta> archivos;
+
+    @OneToOne(mappedBy = "respuesta", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Apelacion apelacion;
 }
