@@ -43,7 +43,6 @@ public class RespuestaApelacionService {
         resp.setFechaRespuesta(new Date());
         resp.setResultado(dto.getResultado());
 
-        List<ArchivoRespuestaApelacion> lista = new ArrayList<>();
         if (archivos != null) {
             for (MultipartFile file : archivos) {
 
@@ -54,14 +53,13 @@ public class RespuestaApelacionService {
                 a.setTipoContenido(file.getContentType());
                 a.setUrl((String) upload.get("secure_url"));
                 a.setPublicId((String) upload.get("public_id"));
-                a.setRespuestaApelacion(resp);
 
-                lista.add(a);
+                a.setRespuestaApelacion(resp);
+                resp.getArchivos().add(a); // <- CLAVE
             }
         }
 
-        resp.setArchivos(lista);
-
         return repository.save(resp);
     }
+
 }
