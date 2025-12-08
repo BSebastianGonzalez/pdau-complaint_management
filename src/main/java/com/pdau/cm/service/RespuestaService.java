@@ -25,11 +25,11 @@ public class RespuestaService {
     @Value("${respuesta.archivos.max-size}")
     private long maxFileSize;
 
-    @Value("${respuesta.appeal-days}")
-    private int appealDays;
-
     @Value("respuesta.exchange")
     private String exchange;
+
+    @Value("${respuesta.appeal-days}")
+    private int appealDays;
 
     @Value("respuesta.creada")
     private String routingKey;

@@ -1,12 +1,12 @@
 package com.pdau.cm.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,22 +14,24 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Respuesta {
+public class Apelacion {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long denunciaId;
-    private Long adminId;
+
+    @OneToOne
+    @JoinColumn(name = "respuesta_id", unique = true)
+    @JsonManagedReference
+    private Respuesta respuesta;
+
     private String detalle;
 
-    private Date fechaRespuesta;
+    private Date fechaApelacion;
 
-    @OneToMany(mappedBy = "respuesta", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "apelacion", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<ArchivoRespuesta> archivos;
-
-    @OneToOne(mappedBy = "respuesta", cascade = CascadeType.ALL)
-    @JsonBackReference
-    private Apelacion apelacion;
+    private List<ArchivoApelacion> archivos = new ArrayList<>();
 }
