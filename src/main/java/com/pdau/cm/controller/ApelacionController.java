@@ -23,4 +23,9 @@ public class ApelacionController {
     ) throws Exception {
         return apelacionService.crearApelacion(dto, archivos);
     }
+
+    @GetMapping("/denuncia/{denunciaId}")
+    public Apelacion obtenerPorDenuncia(@PathVariable Long denunciaId) {
+        return apelacionService.obtenerPorDenunciaId(denunciaId);
+    }
 }
