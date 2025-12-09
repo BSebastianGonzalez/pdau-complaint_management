@@ -63,10 +63,8 @@ public class RespuestaApelacionService {
             }
         }
 
-        // ✅ Guardar
         RespuestaApelacion saved = repository.save(resp);
 
-        // ✅ Evento de auditoría
         RespuestaApelacionAuditEvent event = new RespuestaApelacionAuditEvent();
         event.setRespuestaApelacionId(saved.getId());
         event.setApelacionId(saved.getApelacion().getId());
