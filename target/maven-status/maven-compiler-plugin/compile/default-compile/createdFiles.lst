@@ -33,8 +33,10 @@ com\pdau\cm\controller\RespuestaApelacionController.class
 com\pdau\cm\model\Apelacion.class
 com\pdau\cm\dto\DenunciaDesarchivadaEvent.class
 com\pdau\cm\dto\DenunciaArchivadaEvent.class
+com\pdau\cm\event\ApelacionAuditEvent.class
 com\pdau\cm\model\ResultadoApelacion.class
 com\pdau\cm\controller\ApelacionController.class
+com\pdau\cm\event\RespuestaApelacionAuditEvent.class
 com\pdau\cm\event\RespuestaAuditEvent.class
 com\pdau\cm\repository\RespuestaApelacionRepository.class
 com\pdau\cm\controller\RespuestaController.class
