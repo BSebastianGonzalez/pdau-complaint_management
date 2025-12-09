@@ -62,4 +62,8 @@ public class RespuestaApelacionService {
         return repository.save(resp);
     }
 
+    public RespuestaApelacion obtenerPorDenunciaId(Long denunciaId) {
+        return repository.findByApelacionDenunciaId(denunciaId)
+                .orElseThrow(() -> new RuntimeException("No existe respuesta de apelación para esa denuncia"));
+    }
 }

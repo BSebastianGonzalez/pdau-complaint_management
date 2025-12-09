@@ -76,4 +76,9 @@ public class ApelacionService {
 
         return apelacionRepository.save(apelacion);
     }
+
+    public Apelacion obtenerPorDenunciaId(Long denunciaId) {
+        return apelacionRepository.findByDenunciaId(denunciaId)
+                .orElseThrow(() -> new RuntimeException("No existe apelación para esta denuncia"));
+    }
 }
