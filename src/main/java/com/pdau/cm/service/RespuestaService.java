@@ -1,6 +1,8 @@
 package com.pdau.cm.service;
 
+import com.pdau.cm.config.RabbitConfig;
 import com.pdau.cm.dto.RespuestaRegistradaEvent;
+import com.pdau.cm.event.RespuestaAuditEvent;
 import com.pdau.cm.model.ArchivoRespuesta;
 import com.pdau.cm.model.Respuesta;
 import com.pdau.cm.repository.RespuestaRepository;
@@ -34,7 +36,12 @@ public class RespuestaService {
     @Value("respuesta.creada")
     private String routingKey;
 
-    public Respuesta registrarRespuesta(Long denunciaId, Long adminId, String detalle, List<MultipartFile> files) throws Exception {
+    public Respuesta registrarRespuesta(
+            Long denunciaId,
+            Long adminId,
+            String detalle,
+            List<MultipartFile> files
+    ) throws Exception {
 
         List<ArchivoRespuesta> archivos = new ArrayList<>();
         if (files != null) {
@@ -42,6 +49,7 @@ public class RespuestaService {
                 if (f.getSize() > maxFileSize) {
                     throw new IllegalArgumentException("Archivo demasiado grande: " + f.getOriginalFilename());
                 }
+
                 ArchivoRespuesta ar = new ArchivoRespuesta();
                 ar.setNombre(f.getOriginalFilename());
                 ar.setTipoContenido(f.getContentType());
@@ -72,8 +80,22 @@ public class RespuestaService {
 
         rabbitTemplate.convertAndSend(exchange, routingKey, event);
 
+        RespuestaAuditEvent auditEvent = new RespuestaAuditEvent();
+        auditEvent.setRespuestaId(saved.getId());
+        auditEvent.setDenunciaId(saved.getDenunciaId());
+        auditEvent.setAdminId(saved.getAdminId());
+        auditEvent.setDetalle(saved.getDetalle());
+        auditEvent.setFechaRespuesta(saved.getFechaRespuesta());
+
+        rabbitTemplate.convertAndSend(
+                RabbitConfig.AUDITORIA_EXCHANGE,
+                RabbitConfig.AUDITORIA_ROUTING_KEY,
+                auditEvent
+        );
+
         return saved;
     }
+
 
     public Optional<Respuesta> findByDenunciaId(Long denunciaId) {
         return respuestaRepository.findByDenunciaId(denunciaId);

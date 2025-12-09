@@ -23,6 +23,8 @@ public class RabbitConfig {
     public static final String DESARCHIVAMIENTO_QUEUE = "denuncia_desarchivada_queue";
     public static final String DESARCHIVAMIENTO_ROUTING_KEY = "denuncia.desarchivada";
 
+    public static final String AUDITORIA_EXCHANGE = "auditoria.respuesta.exchange";
+    public static final String AUDITORIA_ROUTING_KEY = "auditoria.respuesta.creada";
 
 
     @Bean
@@ -79,6 +81,11 @@ public class RabbitConfig {
         return BindingBuilder.bind(desarchivamientoQueue)
                 .to(archivamientoExchange)
                 .with(DESARCHIVAMIENTO_ROUTING_KEY);
+    }
+
+    @Bean
+    public TopicExchange auditoriaExchange() {
+        return new TopicExchange(AUDITORIA_EXCHANGE);
     }
 }
 
