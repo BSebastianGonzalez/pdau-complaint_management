@@ -26,6 +26,11 @@ public class RabbitConfig {
     public static final String AUDITORIA_EXCHANGE = "auditoria.respuesta.exchange";
     public static final String AUDITORIA_ROUTING_KEY = "auditoria.respuesta.creada";
 
+    public static final String APELACION_EXCHANGE = "auditoria.apelacion.exchange";
+    public static final String APELACION_ROUTING_KEY = "auditoria.apelacion.creada";
+
+    public static final String RESPUESTA_APELACION_EXCHANGE = "auditoria.respuesta_apelacion.exchange";
+    public static final String RESPUESTA_APELACION_ROUTING_KEY = "auditoria.respuesta_apelacion.creada";
 
     @Bean
     public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
@@ -86,6 +91,16 @@ public class RabbitConfig {
     @Bean
     public TopicExchange auditoriaExchange() {
         return new TopicExchange(AUDITORIA_EXCHANGE);
+    }
+
+    @Bean
+    public TopicExchange apelacionAuditExchange() {
+        return new TopicExchange(APELACION_EXCHANGE);
+    }
+
+    @Bean
+    public TopicExchange respuestaApelacionAuditExchange() {
+        return new TopicExchange(RESPUESTA_APELACION_EXCHANGE);
     }
 }
 
