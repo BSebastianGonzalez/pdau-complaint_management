@@ -1,6 +1,8 @@
 package com.pdau.cm.service;
 
+import com.pdau.cm.config.RabbitConfig;
 import com.pdau.cm.dto.ApelacionDTO;
+import com.pdau.cm.event.ApelacionAuditEvent;
 import com.pdau.cm.model.Apelacion;
 import com.pdau.cm.model.ArchivoApelacion;
 import com.pdau.cm.model.CloudinaryService;
@@ -8,6 +10,7 @@ import com.pdau.cm.model.Respuesta;
 import com.pdau.cm.repository.ApelacionRepository;
 import com.pdau.cm.repository.RespuestaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +28,7 @@ public class ApelacionService {
     private final ApelacionRepository apelacionRepository;
     private final RespuestaRepository respuestaRepository;
     private final CloudinaryService cloudinaryService;
+    private final RabbitTemplate rabbitTemplate;
 
     @Value("${respuesta.appeal-days}")
     private int appealDays;
@@ -74,8 +78,25 @@ public class ApelacionService {
 
         apelacion.setArchivos(lista);
 
-        return apelacionRepository.save(apelacion);
+        // ✅ Guardar
+        Apelacion saved = apelacionRepository.save(apelacion);
+
+        // ✅ Evento de auditoría
+        ApelacionAuditEvent event = new ApelacionAuditEvent();
+        event.setApelacionId(saved.getId());
+        event.setDenunciaId(saved.getDenunciaId());
+        event.setDetalle(saved.getDetalle());
+        event.setFechaApelacion(saved.getFechaApelacion());
+
+        rabbitTemplate.convertAndSend(
+                RabbitConfig.APELACION_EXCHANGE,
+                RabbitConfig.APELACION_ROUTING_KEY,
+                event
+        );
+
+        return saved;
     }
+
 
     public Apelacion obtenerPorDenunciaId(Long denunciaId) {
         return apelacionRepository.findByDenunciaId(denunciaId)

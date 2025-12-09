@@ -1,6 +1,8 @@
 package com.pdau.cm.service;
 
+import com.pdau.cm.config.RabbitConfig;
 import com.pdau.cm.dto.RespuestaApelacionDTO;
+import com.pdau.cm.event.RespuestaApelacionAuditEvent;
 import com.pdau.cm.model.Apelacion;
 import com.pdau.cm.model.ArchivoRespuestaApelacion;
 import com.pdau.cm.model.CloudinaryService;
@@ -8,6 +10,7 @@ import com.pdau.cm.model.RespuestaApelacion;
 import com.pdau.cm.repository.ApelacionRepository;
 import com.pdau.cm.repository.RespuestaApelacionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +26,7 @@ public class RespuestaApelacionService {
     private final RespuestaApelacionRepository repository;
     private final ApelacionRepository apelacionRepository;
     private final CloudinaryService cloudinaryService;
+    private final RabbitTemplate rabbitTemplate;
 
     public RespuestaApelacion responderApelacion(
             RespuestaApelacionDTO dto,
@@ -53,14 +57,33 @@ public class RespuestaApelacionService {
                 a.setTipoContenido(file.getContentType());
                 a.setUrl((String) upload.get("secure_url"));
                 a.setPublicId((String) upload.get("public_id"));
-
                 a.setRespuestaApelacion(resp);
-                resp.getArchivos().add(a); // <- CLAVE
+
+                resp.getArchivos().add(a);
             }
         }
 
-        return repository.save(resp);
+        // ✅ Guardar
+        RespuestaApelacion saved = repository.save(resp);
+
+        // ✅ Evento de auditoría
+        RespuestaApelacionAuditEvent event = new RespuestaApelacionAuditEvent();
+        event.setRespuestaApelacionId(saved.getId());
+        event.setApelacionId(saved.getApelacion().getId());
+        event.setAdminId(saved.getAdminId());
+        event.setDetalle(saved.getDetalle());
+        event.setFechaRespuesta(saved.getFechaRespuesta());
+        event.setResultado(saved.getResultado().name());
+
+        rabbitTemplate.convertAndSend(
+                RabbitConfig.RESPUESTA_APELACION_EXCHANGE,
+                RabbitConfig.RESPUESTA_APELACION_ROUTING_KEY,
+                event
+        );
+
+        return saved;
     }
+
 
     public RespuestaApelacion obtenerPorDenunciaId(Long denunciaId) {
         return repository.findByApelacionDenunciaId(denunciaId)
