@@ -3,6 +3,7 @@ package com.pdau.cm.service;
 import com.pdau.cm.config.RabbitConfig;
 import com.pdau.cm.dto.DenunciaArchivadaEvent;
 import com.pdau.cm.dto.DenunciaDesarchivadaEvent;
+import com.pdau.cm.event.ArchivamientoAuditEvent;
 import com.pdau.cm.model.ArchivamientoDenuncia;
 import com.pdau.cm.repository.ArchivamientoDenunciaRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +32,12 @@ public class ArchivarDenunciaService {
         archivamientoRepository.findByDenunciaIdAndActivoTrue(denunciaId)
                 .ifPresent(a -> { throw new IllegalStateException("La denuncia ya está archivada"); });
 
-        // Obtener nombre del admin
         String url = authUrl + "/api/admin/" + adminId;
         Map<String, Object> adminData = restTemplate.getForObject(url, Map.class);
         String nombreAdmin = adminData != null
-                ? adminData.get("nombre") + " " + adminData.get("apellido")
+                ? (String) (adminData.get("nombre") + " " + adminData.get("apellido"))
                 : "Administrador desconocido";
 
-        // ✅ Usar el constructor correcto
         ArchivamientoDenuncia archivamiento = new ArchivamientoDenuncia(
                 denunciaId,
                 adminId,
@@ -46,26 +45,39 @@ public class ArchivarDenunciaService {
                 nombreAdmin,
                 LocalDateTime.now()
         );
-        // El campo activo ya está en true por el constructor
 
-        archivamientoRepository.save(archivamiento);
+        // Guardar en BD (para obtener id)
+        ArchivamientoDenuncia saved = archivamientoRepository.save(archivamiento);
 
-        // Notificar vía RabbitMQ
-        DenunciaArchivadaEvent event = new DenunciaArchivadaEvent(
+        DenunciaArchivadaEvent dominioEvent = new DenunciaArchivadaEvent(
                 denunciaId,
                 adminId,
                 justificacion,
                 nombreAdmin,
-                archivamiento.getFechaArchivado()
+                saved.getFechaArchivado()
         );
         rabbitTemplate.convertAndSend(
                 RabbitConfig.ARCHIVAMIENTO_EXCHANGE,
                 RabbitConfig.ARCHIVAMIENTO_ROUTING_KEY,
-                event
+                dominioEvent
         );
 
-        return archivamiento;
+        ArchivamientoAuditEvent auditEvent = new ArchivamientoAuditEvent();
+        auditEvent.setArchivamientoId(saved.getId());
+        auditEvent.setDenunciaId(saved.getDenunciaId());
+        auditEvent.setAdminId(saved.getAdminId());
+        auditEvent.setJustificacion(saved.getJustificacion());
+        auditEvent.setFechaArchivado(saved.getFechaArchivado());
+
+        rabbitTemplate.convertAndSend(
+                RabbitConfig.ARCHIVAMIENTO_AUD_EXCHANGE,
+                RabbitConfig.ARCHIVAMIENTO_AUD_ROUTING_KEY,
+                auditEvent
+        );
+
+        return saved;
     }
+
 
 
     public List<ArchivamientoDenuncia> obtenerTodos() {
