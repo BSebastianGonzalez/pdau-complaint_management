@@ -13,6 +13,8 @@ C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservi
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\dto\RespuestaApelacionDTO.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\dto\RespuestaRegistradaEvent.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\event\ApelacionAuditEvent.java
+C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\event\ArchivamientoAuditEvent.java
+C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\event\ComentarioAuditEvent.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\event\RespuestaApelacionAuditEvent.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\event\RespuestaAuditEvent.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\complaint_management\src\main\java\com\pdau\cm\model\Apelacion.java
