@@ -1,8 +1,11 @@
 package com.pdau.cm.service;
 
+import com.pdau.cm.config.RabbitConfig;
+import com.pdau.cm.event.ComentarioAuditEvent;
 import com.pdau.cm.model.Comentario;
 import com.pdau.cm.repository.ComentarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,13 +20,30 @@ public class ComentarioService {
 
     private final ComentarioRepository comentarioRepository;
     private final RestTemplate restTemplate = new RestTemplate();
+    private final RabbitTemplate rabbitTemplate;
 
     @Value("${microservicios.auth-url}")
     private String authenticationServiceUrl;
 
     public Comentario crearComentario(Comentario comentario) {
         comentario.setFechaCreacion(LocalDateTime.now());
-        return comentarioRepository.save(comentario);
+
+        Comentario saved = comentarioRepository.save(comentario);
+
+        ComentarioAuditEvent auditEvent = new ComentarioAuditEvent();
+        auditEvent.setComentarioId(saved.getId());
+        auditEvent.setDenunciaId(saved.getIdDenuncia());
+        auditEvent.setAdminId(saved.getIdAdmin());
+        auditEvent.setContenido(saved.getContenido());
+        auditEvent.setFechaCreacion(saved.getFechaCreacion());
+
+        rabbitTemplate.convertAndSend(
+                RabbitConfig.COMENTARIO_EXCHANGE,
+                RabbitConfig.COMENTARIO_ROUTING_KEY,
+                auditEvent
+        );
+
+        return saved;
     }
 
     public List<Comentario> obtenerComentariosPorDenuncia(Long idDenuncia) {
